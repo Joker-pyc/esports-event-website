@@ -1,444 +1,455 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CLASH BLAZING E-SPORTS - Team Standings</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap');
+      @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap");
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body,
+      html {
+        height: 100%;
+        font-family: "Roboto", sans-serif;
+        color: #ff3333;
+        background: #000;
+        overflow: hidden;
+        background-image: url("assets/bg.jpg");
+      }
+
+      .background-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background-image: url("assets/bg.jpg");
+        background-size: cover;
+        background-position: center;
+        filter: blur(5px) brightness(0.3) hue-rotate(180deg);
+      }
+
+      .container {
+        max-width: 100%;
+        margin: 0 auto;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        height: 100%;
+        text-align: center;
+        overflow: hidden;
+      }
+
+      h1 {
+        font-family: "Orbitron", sans-serif;
+        color: #ff0000;
+        text-transform: uppercase;
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+        text-shadow: 0 0 20px #ff0000;
+        letter-spacing: 2px;
+        background-color: rgba(0, 0, 0, 0.5);
+        border: 4px solid rgb(255, 0, 0);
+        backdrop-filter: blur(5px);
+        border-radius: 20px;
+        border-image: linear-gradient(
+          to right,
+          rgba(255, 0, 0, 0),
+          rgba(255, 0, 0, 0.5),
+          rgba(255, 0, 0, 0)
+        );
+        border-image-slice: 1;
+      }
+
+      h2 {
+        font-family: "Orbitron", sans-serif;
+        color: #ffffff;
+        text-transform: uppercase;
+        font-size: 2rem;
+        margin-bottom: 10px;
+        text-shadow: 0 0 10px #ffffff;
+        letter-spacing: 2px;
+      }
+
+      #day {
+        color: #ff3333;
+        text-shadow: 0 0 16px #ff3333;
+        font-size: 1.2rem;
+        display: block;
+        margin-top: 5px;
+      }
+
+      .standings-table-container {
+        width: 100%;
+        margin-top: 20px;
+        overflow: hidden;
+      }
+
+      .standings-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 10px;
+        margin-top: 10px;
+        position: relative;
+      }
+
+      .standings-table th,
+      .standings-table td {
+        padding: 8px;
+        text-align: center;
+        background: rgba(0, 0, 0, 0.656);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 0, 0, 0.3);
+        position: relative;
+      }
+
+      .standings-table th {
+        background: rgba(255, 0, 0, 0.2);
+        color: #fff;
+        text-transform: uppercase;
+        font-weight: bold;
+        font-family: "Orbitron", sans-serif;
+        letter-spacing: 1px;
+      }
+
+      .standings-table tr {
+        transition: all 0.3s ease;
+      }
+
+      .standings-table tr:hover {
+        transform: scale(1.02);
+        box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+      }
+
+      .standings-table td:first-child {
+        font-weight: bold;
+        font-size: 1.1em;
+        color: #ff3333;
+        text-shadow: 0 0 2px #ff3333;
+      }
+
+      .team-name {
+        text-align: left;
+        font-size: 1em;
+        color: #fff;
+        text-shadow: 0 0 5px #fff;
+      }
+
+      .total-score {
+        font-weight: bold;
+        color: #ffffff;
+        font-size: 1.1em;
+        text-shadow: 0 0 4px #ffffff;
+      }
+
+      .mvp {
+        font-family: "Orbitron", sans-serif;
+        margin-top: 20px;
+        font-size: 1.2em;
+        color: #ffff00;
+        text-shadow: 0 0 10px #ffff00;
+        text-align: center;
+        animation: blink 1s infinite;
+      }
+
+      /* animation for the mvp */
+      @keyframes blink {
+        0% {
+          opacity: 1;
         }
-
-        body, html {
-            height: 100%;
-            font-family: 'Roboto', sans-serif;
-            color: #ff3333;
-            background: #000;
-            overflow: hidden;
-            background-image: url('assets/bg.jpg');
+        50% {
+          opacity: 0.5;
         }
-
-        .background-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background-image: url('assets/bg.jpg');
-            background-size: cover;
-            background-position: center;
-            filter: blur(5px) brightness(0.3) hue-rotate(180deg);
+        100% {
+          opacity: 1;
         }
+      }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
-            height: 100%;
-            text-align: center;
+      @media (max-width: 768px) {
+        .standings-table {
+          font-size: 0.8em;
         }
 
         h1 {
-            font-family: 'Orbitron', sans-serif;
-            color: #ff0000;
-            text-transform: uppercase;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 0 0 20px #ff0000;
-            letter-spacing: 2px;
+          font-size: 1.8rem;
         }
 
         h2 {
-            font-family: 'Orbitron', sans-serif;
-            color: #ffffff;
-            text-transform: uppercase;
-            font-size: 2rem;
-            margin-bottom: 10px;
-            text-shadow: 0 0 10px #ffffff;
-            letter-spacing: 2px;
-        }
-
-        #day {
-            color: #ff3333;
-            text-shadow: 0 0 8px #ff3333, 0 0 16px #ff3333;
-            font-size: 1.2rem;
-            display: block;
-            margin-top: 5px;
-        }
-
-        .standings-table-container {
-            width: 100%;
-            overflow-x: auto;
-            margin-top: 20px;
-        }
-
-        .standings-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0 10px;
-            margin-top: 10px;
-            position: relative;
+          font-size: 1.5rem;
         }
 
         .standings-table th,
         .standings-table td {
-            padding: 8px;
-            text-align: center;
-            background: rgba(0, 0, 0, 0.656);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 0, 0, 0.3);
-            position: relative;
-            overflow: hidden;
+          padding: 6px;
         }
+      }
 
-        .standings-table th {
-            background: rgba(255, 0, 0, 0.2);
-            color: #fff;
-            text-transform: uppercase;
-            font-weight: bold;
-            font-family: 'Orbitron', sans-serif;
-            letter-spacing: 1px;
+      @keyframes glow {
+        0% {
+          box-shadow: 0 0 5px #ff0000;
         }
-
-        .standings-table tr {
-            transition: all 0.3s ease;
+        50% {
+          box-shadow: 0 0 20px #ff0000, 0 0 30px #ff0000;
         }
-
-        .standings-table tr:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+        100% {
+          box-shadow: 0 0 5px #ff0000;
         }
+      }
 
-        .standings-table td:first-child {
-            font-weight: bold;
-            font-size: 1.1em;
-            color: #ff3333;
-            text-shadow: 0 0 2px #ff3333;
-        }
+      .standings-table::before {
+        content: "";
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(45deg, #ff0000, #990000, #660000, #ff0000);
+        z-index: -1;
+        filter: blur(10px);
+        animation: glow 3s linear infinite;
+      }
 
-        .team-name {
-            text-align: left;
-            font-size: 1em;
-            color: #fff;
-            text-shadow: 0 0 5px #fff;
-        }
-
-        .total-score {
-            font-weight: bold;
-            color: #ffffff;
-            font-size: 1.1em;
-            text-shadow: 0 0 4px #ffffff;
-        }
-
-        .mvp {
-            font-family: 'Orbitron', sans-serif;
-            margin-top: 20px;
-            font-size: 1.2em;
-            color: #ffff00;
-            text-shadow: 0 0 10px #ffff00;
-            text-align: center;
-            animation: blink 1s infinite;
-
-        }
-        /* animation for the mvp */
-
-        @keyframes blink {
-            0% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.5;
-            }
-            100% {
-                opacity: 1;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .standings-table {
-                font-size: 0.8em;
-            }
-            
-            h1 {
-                font-size: 1.8rem;
-            }
-
-            h2 {
-                font-size: 1.5rem;
-            }
-
-            .standings-table th, .standings-table td {
-                padding: 6px;
-            }
-        }
-
-        @keyframes glow {
-            0% {
-                box-shadow: 0 0 5px #ff0000;
-            }
-            50% {
-                box-shadow: 0 0 20px #ff0000, 0 0 30px #ff0000;
-            }
-            100% {
-                box-shadow: 0 0 5px #ff0000;
-            }
-        }
-
-        .standings-table::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, #ff0000, #990000, #660000, #ff0000);
-            z-index: -1;
-            filter: blur(10px);
-            animation: glow 3s linear infinite;
-        }
-
-        #smokeCanvas,
-        #particles-js,
-        #n64-particles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #00000000;
-        }
+      #smokeCanvas,
+      #particles-js,
+      #n64-particles {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #00000000;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="background-container"></div>
     <div class="container">
-        <div id="particles-js"></div>
-        <canvas id="n64-particles"></canvas>
-        <h1>CLASH BLAZING E-SPORTS<br><span id="day">SUNDAY SHOWDOWN</span></h1>
-        <h2>TOP 10 TEAMS</h2>
-        <div class="standings-table-container">
-            <table class="standings-table">
-                <thead>
-                    <tr>
-                        <th>Rank</th>
-                        <th>Team</th>
-                        <th>Wins</th>
-                        <th>Place</th>
-                        <th>Kills</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td class="team-name">TEAM CLASH BLAZING</td>
-                        <td>01</td>
-                        <td>13</td>
-                        <td>23</td>
-                        <td class="total-score">36</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td class="team-name">TEAM DEADLY TITANS</td>
-                        <td>--</td>
-                        <td>6</td>
-                        <td>20</td>
-                        <td class="total-score">26</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td class="team-name">TEAM 7SKYS</td>
-                        <td>01</td>
-                        <td>10</td>
-                        <td>15</td>
-                        <td class="total-score">25</td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td class="team-name">TEAM N1 | eSports</td>
-                        <td>--</td>
-                        <td>4</td>
-                        <td>8</td>
-                        <td class="total-score">12</td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td class="team-name">TEAM RYTNIX</td>
-                        <td>--</td>
-                        <td>5</td>
-                        <td>7</td>
-                        <td class="total-score">12</td>
-                    </tr>
-                    <tr>
-                        <td>6</td>
-                        <td class="team-name">TEAM ICE</td>
-                        <td>--</td>
-                        <td>3</td>
-                        <td>8</td>
-                        <td class="total-score">11</td>
-                    </tr>
-                    <tr>
-                        <td>7</td>
-                        <td class="team-name">TEAM EMPTY VOID</td>
-                        <td>--</td>
-                        <td>1</td>
-                        <td>10</td>
-                        <td class="total-score">11</td>
-                    </tr>
-                    <tr>
-                        <td>8</td>
-                        <td class="team-name">TEAM NOOB WH</td>
-                        <td>--</td>
-                        <td>5</td>
-                        <td>3</td>
-                        <td class="total-score">8</td>
-                    </tr>
-                    <tr>
-                        <td>9</td>
-                        <td class="team-name">TEAM OPTION</td>
-                        <td>--</td>
-                        <td>4</td>
-                        <td>4</td>
-                        <td class="total-score">8</td>
-                    </tr>
-                    <tr>
-                        <td>10</td>
-                        <td class="team-name">TEAM WAR LORD</td>
-                        <td>--</td>
-                        <td>3</td>
-                        <td>5</td>
-                        <td class="total-score">8</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="mvp">MVP - CBxLuckY with 13 kills</div>
+      <div id="particles-js"></div>
+      <canvas id="n64-particles"></canvas>
+      <h1>CLASH BLAZING E-SPORTS<br /><span id="day">SUNDAY SHOWDOWN</span></h1>
+      <h2>TOP 10 TEAMS</h2>
+      <div class="standings-table-container">
+        <table class="standings-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Team</th>
+              <th>Wins</th>
+              <th>Place</th>
+              <th>Kills</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td class="team-name">TEAM CLASH BLAZING</td>
+              <td>01</td>
+              <td>13</td>
+              <td>23</td>
+              <td class="total-score">36</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td class="team-name">TEAM DEADLY TITANS</td>
+              <td>--</td>
+              <td>6</td>
+              <td>20</td>
+              <td class="total-score">26</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td class="team-name">TEAM 7SKYS</td>
+              <td>01</td>
+              <td>10</td>
+              <td>15</td>
+              <td class="total-score">25</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td class="team-name">TEAM N1 | eSports</td>
+              <td>--</td>
+              <td>4</td>
+              <td>8</td>
+              <td class="total-score">12</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td class="team-name">TEAM RYTNIX</td>
+              <td>--</td>
+              <td>5</td>
+              <td>7</td>
+              <td class="total-score">12</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td class="team-name">TEAM ICE</td>
+              <td>--</td>
+              <td>3</td>
+              <td>8</td>
+              <td class="total-score">11</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td class="team-name">TEAM eSports</td>
+              <td>--</td>
+              <td>2</td>
+              <td>4</td>
+              <td class="total-score">6</td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td class="team-name">TEAM NEON</td>
+              <td>--</td>
+              <td>2</td>
+              <td>3</td>
+              <td class="total-score">5</td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td class="team-name">TEAM AXIS ESPORTS</td>
+              <td>--</td>
+              <td>1</td>
+              <td>3</td>
+              <td class="total-score">4</td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td class="team-name">TEAM VULTURE</td>
+              <td>--</td>
+              <td>--</td>
+              <td>--</td>
+              <td class="total-score">--</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="mvp">MVP - CBxLuckY with 13 kills</div>
     </div>
+
     <canvas id="smokeCanvas"></canvas>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
 
     <script>
-        particlesJS('particles-js', {
-            particles: {
-                number: {
-                    value: 80,
-                    density: {
-                        enable: true,
-                        value_area: 800
-                    }
-                },
-                color: {
-                    value: "#ff0000"
-                },
-                shape: {
-                    type: "circle",
-                    stroke: {
-                        width: 0,
-                        color: "#ff0000"
-                    },
-                    polygon: {
-                        nb_sides: 5
-                    },
-                    image: {
-                        src: "img/github.svg",
-                        width: 100,
-                        height: 100
-                    }
-                },
-                opacity: {
-                    value: 0.5,
-                    random: false,
-                    anim: {
-                        enable: false,
-                        speed: 1,
-                        opacity_min: 0.1,
-                        sync: false
-                    }
-                },
-                size: {
-                    value: 3,
-                    random: true,
-                    anim: {
-                        enable: false,
-                        speed: 40,
-                        size_min: 0.1,
-                        sync: false
-                    }
-                },
-                line_linked: {
-                    enable: true,
-                    distance: 150,
-                    color: "#ff0000",
-                    opacity: 0.4,
-                    width: 1
-                },
-                move: {
-                    enable: true,
-                    speed: 6,
-                    direction: "none",
-                    random: false,
-                    straight: false,
-                    out_mode: "out",
-                    bounce: false,
-                    attract: {
-                        enable: false,
-                        rotateX: 600,
-                        rotateY: 1200
-                    }
-                }
+      particlesJS("particles-js", {
+        particles: {
+          number: {
+            value: 80,
+            density: {
+              enable: true,
+              value_area: 800,
             },
-            interactivity: {
-                detect_on: "canvas",
-                events: {
-                    onhover: {
-                        enable: true,
-                        mode: "repulse"
-                    },
-                    onclick: {
-                        enable: true,
-                        mode: "push"
-                    },
-                    resize: true
-                },
-                modes: {
-                    grab: {
-                        distance: 400,
-                        line_linked: {
-                            opacity: 1
-                        }
-                    },
-                    bubble: {
-                        distance: 400,
-                        size: 40,
-                        duration: 2,
-                        opacity: 8,
-                        speed: 3
-                    },
-                    repulse: {
-                        distance: 200,
-                        duration: 0.4
-                    },
-                    push: {
-                        particles_nb: 4
-                    },
-                    remove: {
-                        particles_nb: 2
-                    }
-                }
+          },
+          color: {
+            value: "#ff0000",
+          },
+          shape: {
+            type: "circle",
+            stroke: {
+              width: 0,
+              color: "#ff0000",
             },
-            retina_detect: true
-        });
-
-        
+            polygon: {
+              nb_sides: 5,
+            },
+            image: {
+              src: "img/github.svg",
+              width: 100,
+              height: 100,
+            },
+          },
+          opacity: {
+            value: 0.5,
+            random: false,
+            anim: {
+              enable: false,
+              speed: 1,
+              opacity_min: 0.1,
+              sync: false,
+            },
+          },
+          size: {
+            value: 3,
+            random: true,
+            anim: {
+              enable: false,
+              speed: 40,
+              size_min: 0.1,
+              sync: false,
+            },
+          },
+          line_linked: {
+            enable: true,
+            distance: 150,
+            color: "#ff0000",
+            opacity: 0.4,
+            width: 1,
+          },
+          move: {
+            enable: true,
+            speed: 6,
+            direction: "none",
+            random: false,
+            straight: false,
+            out_mode: "out",
+            bounce: false,
+            attract: {
+              enable: false,
+              rotateX: 600,
+              rotateY: 1200,
+            },
+          },
+        },
+        interactivity: {
+          detect_on: "canvas",
+          events: {
+            onhover: {
+              enable: true,
+              mode: "repulse",
+            },
+            onclick: {
+              enable: true,
+              mode: "push",
+            },
+            resize: true,
+          },
+          modes: {
+            grab: {
+              distance: 400,
+              line_linked: {
+                opacity: 1,
+              },
+            },
+            bubble: {
+              distance: 400,
+              size: 40,
+              duration: 2,
+              opacity: 8,
+              speed: 3,
+            },
+            repulse: {
+              distance: 200,
+              duration: 0.4,
+            },
+            push: {
+              particles_nb: 4,
+            },
+            remove: {
+              particles_nb: 2,
+            },
+          },
+        },
+        retina_detect: true,
+      });
     </script>
-</body>
+  </body>
 </html>
