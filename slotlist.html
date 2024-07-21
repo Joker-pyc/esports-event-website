@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLASH BLAZING E-SPORTS - SUNDAY SHOWDOWN</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            height: 100%;
+            font-family: 'Orbitron', sans-serif;
+            color: #fff;
+            overflow: hidden;
+            background: #00000000;
+        }
+
+        .background-container {
+            background: black;
+            background-image: url('erangel.jpg');
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .background-image {
+
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('erangel.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: blur(5px);
+        }
+
+        #smokeCanvas,
+        #particles-js,
+        #n64-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #00000000;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff0000;
+            text-transform: uppercase;
+            font-size: 6rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 6px #ff0000;
+            background-color: rgba(0, 0, 0, 0.5);
+            border: 4px solid rgb(255, 0, 0);
+            padding: 40px;
+            backdrop-filter: blur(5px);
+            border-radius: 20px;
+            border-image: linear-gradient(to right, rgba(255, 0, 0, 0), rgba(255, 0, 0, 0.5), rgba(255, 0, 0, 0));
+            border-image-slice: 1;
+        }
+
+        .slot-list {
+            list-style-type: none;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            max-width: 4000px;
+            width: 100%;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .slot-item {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            width: calc(30% - 1px);
+            min-width: 200px;
+            display: flex;
+            font-size: 2rem;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .slot-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.7);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .slot-number {
+            background-color: #ff0000;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .team-name {
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        .locked {
+            background: rgba(74, 74, 74, 0.3);
+            color: #aaa;
+        }
+
+        .locked .slot-number {
+            background-color: #700;
+        }
+
+        @media (max-width: 768px) {
+            .slot-item {
+                width: calc(50% - 15px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .slot-item {
+                width: 100%;
+            }
+        }
+
+        #day {
+            color: #ffffff;
+            text-shadow: 0 0 8px #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="background-container">
+        <div class="background-image"></div>
+        <canvas id="smokeCanvas"></canvas>
+        <div id="particles-js"></div>
+        <canvas id="n64-particles"></canvas>
+    </div>
+    <div class="container">
+        <h1>CLASH BLAZING E-SPORTS<br><span id="day">SUNDAY SHOWDOWN</span></h1>
+        <ul class="slot-list">
+            <!-- Slot items will be dynamically generated here -->
+        </ul>
+    </div>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+
+    <script>
+        // Particle.js configuration
+        particlesJS("particles-js", {
+            "particles": {
+                "number": {
+                    "value": 80,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": [ "#000000"]  // Red and Black
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
+                    },
+                    "polygon": {
+                        "nb_sides": 5
+                    }
+                },
+                "opacity": {
+                    "value": 0.5,
+                    "random": false,
+                    "anim": {
+                        "enable": false,
+                        "speed": 1,
+                        "opacity_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": 3,
+                    "random": true,
+                    "anim": {
+                        "enable": false,
+                        "speed": 40,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#FF0000",
+                    "opacity": 0.4,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 6,
+                    "direction": "none",
+                    "random": false,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false,
+                    "attract": {
+                        "enable": false,
+                        "rotateX": 600,
+                        "rotateY": 1200
+                    }
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "repulse"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 400,
+                        "line_linked": {
+                            "opacity": 1
+                        }
+                    },
+                    "bubble": {
+                        "distance": 400,
+                        "size": 40,
+                        "duration": 2,
+                        "opacity": 8,
+                        "speed": 3
+                    },
+                    "repulse": {
+                        "distance": 200,
+                        "duration": 0.4
+                    },
+                    "push": {
+                        "particles_nb": 4
+                    },
+                    "remove": {
+                        "particles_nb": 2
+                    }
+                }
+            },
+            "retina_detect": true
+        });
+
+        // N64 particles script
+        const canvas = document.getElementById('n64-particles');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+
+        let particles = [];
+        let mouse = { x: null, y: null };
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 3 + 1;
+                this.speedY = Math.random() * -2 - 1;
+                this.color = 'red';
+            }
+
+            update() {
+                this.y += this.speedY;
+                this.size -= 0.05;
+
+                if (mouse.x && mouse.y) {
+                    const dx = this.x - mouse.x;
+                    const dy = this.y - mouse.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < 100) {
+                        this.x += dx / distance * 2;
+                        this.y += dy / distance * 2;
+                    }
+                }
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function createParticles() {
+            for (let i = 0; i < 2; i++) {
+                const x = Math.random() * canvas.width;
+                const y = 0;
+                particles.push(new Particle(x, y));
+            }
+        }
+
+        function animateN64Particles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            createParticles();
+
+            particles = particles.filter(particle => {
+                particle.update();
+                particle.draw();
+                return particle.size > 0.1 && particle.y > 0;
+            });
+
+            requestAnimationFrame(animateN64Particles);
+        }
+
+        animateN64Particles();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        canvas.addEventListener('mousemove', (event) => {
+            mouse.x = event.x;
+            mouse.y = event.y;
+        });
+
+        canvas.addEventListener('mouseleave', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        // Generate slot items dynamically
+        const slotList = document.querySelector('.slot-list');
+        const teams = [
+            "LOCKED", "LOCKED", "LOCKED", "TEAM THUNDER eSports", "TEAM RYTNIX", "TEAM OPTION", "TEAM BADSHAAH", "TEAM SKY eSports",
+            "TEAM NOOB WH", "TEAM WARLOCKS", "TEAM AIM", "TEAM BB", "TEAM KUDI SANGHA", "TEAM 7SKY",
+            "TEAM EMPTY VOID", "TEAM Ni | eSports", "TEAM DIGITAL DOMINION", "TEAM SECRET", "TEAM FROM HELL",
+            "TEAM NIGHT GAMER", "TEAM XENON GAMING", "TEAM ICE", "TEAM TFD", "TEAM DEADLY TITANS", "TEAM CLASHBLAZING"
+        ];
+
+        teams.forEach((team, index) => {
+            const li = document.createElement('li');
+            li.className = `slot-item${team === "LOCKED" ? " locked" : ""}`;
+            li.innerHTML = `
+                <span class="slot-number">Slot ${(index + 1).toString().padStart(2, '0')}</span>
+                <span class="team-name">${team}</span>
+            `;
+            slotList.appendChild(li);
+        });
+    </script>
+</body>
+</html>
